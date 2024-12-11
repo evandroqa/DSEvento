@@ -1,7 +1,6 @@
 package com.devsuperior.dseventos.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -9,31 +8,37 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_categoria")
-public class Categoria {
+@Table(name = "tb_bloco")
+public class Bloco {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(columnDefinition = "TEXT")
-	private String descricao;
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant inicio;
 	
-	@OneToMany(mappedBy = "categoria")
-	private List<Atividade> atividades = new ArrayList<>();
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant fim;
 	
-	public Categoria() {
+	@ManyToOne
+	@JoinColumn(name = "atividade_id")
+	private Atividade atividades;
+	
+	public Bloco() {
 		
 	}
-	
-	public Categoria(Integer id, String descricao) {
+
+	public Bloco(Integer id, Instant inicio, Instant fim) {
 		this.id = id;
-		this.descricao = descricao;
-	}	
+		this.inicio = inicio;
+		this.fim = fim;
+	}
 
 	public Integer getId() {
 		return id;
@@ -43,15 +48,23 @@ public class Categoria {
 		this.id = id;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public Instant getInicio() {
+		return inicio;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setInicio(Instant inicio) {
+		this.inicio = inicio;
 	}
 
-	public List<Atividade> getAtividades() {
+	public Instant getFim() {
+		return fim;
+	}
+
+	public void setFim(Instant fim) {
+		this.fim = fim;
+	}
+
+	public Atividade getAtividades() {
 		return atividades;
 	}
 
@@ -68,7 +81,7 @@ public class Categoria {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Bloco other = (Bloco) obj;
 		return Objects.equals(id, other.id);
 	}	
 
